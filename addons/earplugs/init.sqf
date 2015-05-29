@@ -6,13 +6,13 @@
 //================================ Settings ================================\\
 //https://community.bistudio.com/wiki/ListOfKeyCodes
 HALV_EarplugKeys = [
-//key to decrease sounds, default 11 wich is - on uk keyboard
-11,
-//key to increase sounds, default 12 wich is + on uk keyboard
-12
+//key to decrease sounds, default [0x0C],["User1"], wich is - on uk/us keyboard and + on northern eu keyboards + customkey "User1"
+[0x0C],["User1"],
+//key to increase sounds, default [0x0D],["User2"] wich is + on uk/us and ´ on northern eu keyboards + customkey "User2"
+[0x0D],["User2"]
 ];
 //info text show on login, "" to disable
-_txt = "Earplugs Enabled, press + to increase or - reduce sounds (uk keyboard)...";
+_txt = "Earplugs Enabled, press + to increase or - reduce sounds (uk/us keyboard)...";
 
 //============================== End Settings ==============================\\
 
@@ -31,7 +31,7 @@ HALV_currentsoundlvl = 1;
 HALV_earplugtoggle = {
 	_msg = "";
 	_key = _this select 1;
-	if(_key == HALV_EarplugKeys select 0)then{
+	if(_key in (HALV_EarplugKeys select 0) || {_key in actionKeys _x}count(HALV_EarplugKeys select 1) > 0)then{
 		HALV_currentsoundlvl = HALV_currentsoundlvl - 0.1;
 		if(HALV_currentsoundlvl < 0)then{
 			HALV_currentsoundlvl = 0;
@@ -43,7 +43,7 @@ HALV_earplugtoggle = {
 		hint _msg;
 		systemChat _msg;
 	};
-	if(_key == HALV_EarplugKeys select 1)then{
+	if(_key in (HALV_EarplugKeys select 2) || {_key in actionKeys _x}count(HALV_EarplugKeys select 3) > 0)then{
 		HALV_currentsoundlvl = HALV_currentsoundlvl + 0.1;
 		if(HALV_currentsoundlvl > 1)then{
 			HALV_currentsoundlvl = 1;
@@ -56,7 +56,7 @@ HALV_earplugtoggle = {
 	};
 };
 
-HALV_earplugsKeyDown = (findDisplay 46) displayAddEventHandler ["KeyDown",{if(_this select 1 in HALV_EarplugKeys)then{_this call HALV_earplugtoggle};}];
+HALV_earplugsKeyDown = (findDisplay 46) displayAddEventHandler ["KeyDown",{_this call HALV_earplugtoggle}];
 
 waitUntil{sleep 1;!(alive player)};
 

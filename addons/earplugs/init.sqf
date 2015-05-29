@@ -14,8 +14,6 @@ HALV_EarplugKeys = [
 //info text show on login, "" to disable
 _txt = "Earplugs Enabled, press + to increase or - reduce sounds (uk/us keyboard)...";
 
-_epochantihack = false;
-
 //============================== End Settings ==============================\\
 
 waitUntil {!isNull (findDisplay 46)};
@@ -58,17 +56,15 @@ HALV_earplugtoggle = {
 	};
 };
 
-if !(_epochantihack)then{
-	HALV_earplugsKeyDown = (findDisplay 46) displayAddEventHandler ["KeyDown",{_this call HALV_earplugtoggle}];
+HALV_earplugsKeyDown = (findDisplay 46) displayAddEventHandler ["KeyDown",{_this call HALV_earplugtoggle}];
 
-	waitUntil{sleep 1;!(alive player)};
+waitUntil{sleep 1;!(alive player)};
 
-	(findDisplay 46) displayRemoveEventHandler ["KeyDown", HALV_earplugsKeyDown];
-	HALV_earplugtoggle = nil;
-	HALV_currentsoundlvl = nil;
-	HALV_earplugsInsereted = nil;
-	HALV_earplugsKeyDown = nil;
-	1 fadeSound 1;
+(findDisplay 46) displayRemoveEventHandler ["KeyDown", HALV_earplugsKeyDown];
+HALV_earplugtoggle = nil;
+HALV_currentsoundlvl = nil;
+HALV_earplugsInsereted = nil;
+HALV_earplugsKeyDown = nil;
+1 fadeSound 1;
 
-	systemChat "Earplugs was removed ...";
-};
+systemChat "Earplugs was removed ...";

@@ -68,3 +68,7 @@ HALV_earplugsKeyDown = nil;
 1 fadeSound 1;
 
 systemChat "Earplugs was removed ...";
+
+waitUntil{sleep 1;(alive player)};
+
+[] execVM __FILE__;

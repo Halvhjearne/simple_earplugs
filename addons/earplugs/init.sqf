@@ -1,6 +1,8 @@
 /*
 	"Simple" Earplugs script
 	by Halv
+	
+	Copyright (C) 2015  Halvhjearne > README.md
 */
 
 //================================ Settings ================================\\

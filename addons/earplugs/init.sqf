@@ -28,8 +28,16 @@ HALV_EarplugKeys = [
 //key to increase sounds, default [0x0D],["User2"] wich is + on uk/us and ´ on northern eu keyboards + customkey "User2"
 [0x0D],["User2"]
 ];
-//autoearplugs
+//autoearplugs true = on when loading in, false = off when loading in
 HALV_AUTOEARPLUGS = true;
+
+_HALV_autoUPDOWNVAL = [
+//auto volume when entering vehicle value fro 0 to 1, 0 = no sound, 1 = full sound
+0.3,
+//auto volume when exiting vehicle value fro 0 to 1, 0 = no sound, 1 = full sound
+1
+];
+
 //info text show on login, "" to disable
 _txt = "Earplugs Enabled, press + to increase or - reduce sounds (uk/us keyboard)...";
 //============================== End Settings ==============================\\
@@ -54,10 +62,9 @@ HALV_earplugtoggle = {
 		if(HALV_currentsoundlvl < 0)then{
 			HALV_currentsoundlvl = 0;
 		};
-		_msg = format["Volume Decreased (%1%2) ...",round(HALV_currentsoundlvl*100),"%"];
 		1 fadeSound HALV_currentsoundlvl;
-		if(HALV_currentsoundlvl < 1)then{_msg = format["Earplugs inserted ... Volume Decreased (90%1)","%"];};
-		if(HALV_currentsoundlvl == 0)then{_msg = format["Volume (0%1) ...","%"];};
+		_msg = format["Volume Decreased (%1%2) ...",round(HALV_currentsoundlvl*100),"%"];
+		if(HALV_currentsoundlvl == 0)then{_msg = format["Muted (0%1) ...","%"];};
 		hint _msg;
 		systemChat _msg;
 	};
@@ -68,7 +75,7 @@ HALV_earplugtoggle = {
 		};
 		_msg = format["Volume Increased (%1%2)...",round(HALV_currentsoundlvl*100),"%"];
 		1 fadeSound HALV_currentsoundlvl;
-		if(HALV_currentsoundlvl == 1)then{_msg = format["Earplugs removed ... Volume (100%1)","%"];};
+		if(HALV_currentsoundlvl == 1)then{_msg = format["Volume (100%1)","%"];};
 		hint _msg;
 		systemChat _msg;
 	};
@@ -100,19 +107,17 @@ _set = false;
 while{alive player}do{
 	if(HALV_AUTOEARPLUGS && player isEqualTo (vehicle player))then{
 		if !(_set)then{
-			HALV_currentsoundlvl = 1;
-			1 fadeSound HALV_currentsoundlvl;
-			_msg = format["Earplugs removed ... Volume (100%1)","%"];
-			hint _msg;
+			HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 1;
+			2 fadeSound HALV_currentsoundlvl;
+			titleText [format["Earplugs removed ... Volume (100%1)","%"],"PLAIN DOWN"];
 			_set = true;
 		};
 	};
 	if(HALV_AUTOEARPLUGS && !(player isEqualTo (vehicle player)))then{
 		if (_set)then{
-			HALV_currentsoundlvl = 0.2;
-			1 fadeSound HALV_currentsoundlvl;
-			_msg = format["Volume Decreased (%1%2) ...",round(HALV_currentsoundlvl*100),"%"];
-			hint _msg;
+			HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 0;
+			2 fadeSound HALV_currentsoundlvl;
+			titleText [format["Earplugs inserted ... Volume Decreased (%1%2)",round(HALV_currentsoundlvl*100),"%"],"PLAIN DOWN"];
 			_set = false;
 		};
 	};

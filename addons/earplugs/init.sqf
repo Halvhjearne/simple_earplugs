@@ -19,28 +19,7 @@ if(isServer)exitWith{};
 
 	Contact : halvhjearne@gmail.com
 */
-
-//================================ Settings ================================\\
-//https://community.bistudio.com/wiki/ListOfKeyCodes
-HALV_EarplugKeys = [
-//key to decrease sounds, default [0x0C],["User1"], wich is - on uk/us keyboard and + on northern eu keyboards + customkey "User1"
-[0x0C],["User1"],
-//key to increase sounds, default [0x0D],["User2"] wich is + on uk/us and ´ on northern eu keyboards + customkey "User2"
-[0x0D],["User2"]
-];
-//autoearplugs true = on when loading in, false = off when loading in
-HALV_AUTOEARPLUGS = true;
-
-_HALV_autoUPDOWNVAL = [
-//auto volume when entering vehicle value fro 0 to 1, 0 = no sound, 1 = full sound
-0.3,
-//auto volume when exiting vehicle value fro 0 to 1, 0 = no sound, 1 = full sound
-1
-];
-
-//info text show on login, "" to disable
-_txt = "Earplugs Enabled, press + to increase or - reduce sounds (uk/us keyboard)...";
-//============================== End Settings ==============================\\
+#include "settings.sqf";
 
 waitUntil {!isNull (findDisplay 46)};
 waitUntil {!dialog};
@@ -103,20 +82,22 @@ _action = player addAction [format["<img size='1.5'image='%1'/> <t color='#0096f
 
 HALV_earplugsKeyDown = (findDisplay 46) displayAddEventHandler ["KeyDown",{_this call HALV_earplugtoggle}];
 
-_set = false;
+waitUntil{sleep 1;!(player isEqualTo (vehicle player))};
+
+_set = true;
 while{alive player}do{
 	if(HALV_AUTOEARPLUGS && player isEqualTo (vehicle player))then{
 		if !(_set)then{
 			HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 1;
-			2 fadeSound HALV_currentsoundlvl;
-			titleText [format["Earplugs removed ... Volume (100%1)","%"],"PLAIN DOWN"];
+			3 fadeSound HALV_currentsoundlvl;
+			titleText [format["Earplugs removed ... Volume Increased (100%1)","%"],"PLAIN DOWN"];
 			_set = true;
 		};
 	};
 	if(HALV_AUTOEARPLUGS && !(player isEqualTo (vehicle player)))then{
 		if (_set)then{
 			HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 0;
-			2 fadeSound HALV_currentsoundlvl;
+			3 fadeSound HALV_currentsoundlvl;
 			titleText [format["Earplugs inserted ... Volume Decreased (%1%2)",round(HALV_currentsoundlvl*100),"%"],"PLAIN DOWN"];
 			_set = false;
 		};

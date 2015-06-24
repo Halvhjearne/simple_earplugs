@@ -32,6 +32,9 @@ HALV_EarplugKeys = [
 //autoearplugs true = on when loading in, false = off when loading in
 HALV_AUTOEARPLUGS = true;
 
+//this is the hotkey to switch auto-earplugs on/off
+_autohotkey = "User3";
+
 _HALV_autoUPDOWNVAL = [
 //auto volume when entering vehicle value fro 0 to 1, 0 = no sound, 1 = full sound
 0.3,

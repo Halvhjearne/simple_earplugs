@@ -26,7 +26,7 @@ waitUntil {!dialog};
 
 sleep 10;
 
-if(_txt != "")then{
+if !(_txt isEqualTo "")then{
 	systemChat _txt;
 	hint _txt;
 };
@@ -43,7 +43,7 @@ HALV_earplugtoggle = {
 		};
 		1 fadeSound HALV_currentsoundlvl;
 		_msg = format["Volume Decreased (%1%2) ...",round(HALV_currentsoundlvl*100),"%"];
-		if(HALV_currentsoundlvl == 0)then{_msg = format["Muted (0%1) ...","%"];};
+		if(HALV_currentsoundlvl isEqualTo 0)then{_msg = format["Muted (0%1) ...","%"];};
 		hint _msg;
 		systemChat _msg;
 	};
@@ -54,7 +54,7 @@ HALV_earplugtoggle = {
 		};
 		_msg = format["Volume Increased (%1%2)...",round(HALV_currentsoundlvl*100),"%"];
 		1 fadeSound HALV_currentsoundlvl;
-		if(HALV_currentsoundlvl == 1)then{_msg = format["Volume (100%1)","%"];};
+		if(HALV_currentsoundlvl isEqualTo 1)then{_msg = format["Volume (100%1)","%"];};
 		hint _msg;
 		systemChat _msg;
 	};
@@ -78,40 +78,42 @@ _action = player addAction [format["<img size='1.5'image='%1'/> <t color='#0096f
 		player setUserActionText [_this select 2,"<img size='1.5'image='\a3\Ui_f\data\gui\Rsc\RscDisplayArcadeMap\section_outroloose_ca.paa'/> <t color='#0096ff'>Auto Earplugs Off</t>"];
 		titleText ["Auto earplugs on","PLAIN DOWN"];
 	};
-},[], -20, false, true, "", ""];
+},[], -20, false, true, _autohotkey, ""];
 
 HALV_earplugsKeyDown = (findDisplay 46) displayAddEventHandler ["KeyDown",{_this call HALV_earplugtoggle}];
 
 waitUntil{sleep 1;!(player isEqualTo (vehicle player))};
-
 _set = true;
 while{alive player}do{
-	if(HALV_AUTOEARPLUGS && player isEqualTo (vehicle player))then{
-		if !(_set)then{
-			HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 1;
-			3 fadeSound HALV_currentsoundlvl;
-			titleText [format["Earplugs removed ... Volume Increased (100%1)","%"],"PLAIN DOWN"];
-			_set = true;
+	if(HALV_AUTOEARPLUGS)then{
+		_isWalking = player isEqualTo (vehicle player);
+		if(_isWalking)then{
+			if !(_set)then{
+				HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 1;
+				3 fadeSound HALV_currentsoundlvl;
+				titleText [format["Earplugs removed ... Volume Increased (100%1)","%"],"PLAIN DOWN"];
+				_set = true;
+			};
 		};
-	};
-	if(HALV_AUTOEARPLUGS && !(player isEqualTo (vehicle player)))then{
-		if (_set)then{
-			HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 0;
-			3 fadeSound HALV_currentsoundlvl;
-			titleText [format["Earplugs inserted ... Volume Decreased (%1%2)",round(HALV_currentsoundlvl*100),"%"],"PLAIN DOWN"];
-			_set = false;
+		if !(_isWalking)then{
+			_isPara = (vehicle player) isKindOf "ParachuteBase";
+			if (_set && !_isPara)then{
+				HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 0;
+				3 fadeSound HALV_currentsoundlvl;
+				titleText [format["Earplugs inserted ... Volume Decreased (%1%2)",round(HALV_currentsoundlvl*100),"%"],"PLAIN DOWN"];
+				_set = false;
+			};
 		};
 	};
 	sleep 1;
 };
 
 waitUntil{sleep 1;!(alive player)};
+player removeAction _action;
 
 (findDisplay 46) displayRemoveEventHandler ["KeyDown", HALV_earplugsKeyDown];
-HALV_earplugtoggle = nil;
-HALV_currentsoundlvl = nil;
-HALV_earplugsKeyDown = nil;
-1 fadeSound 1;
+
+3 fadeSound 1;
 
 systemChat "Earplugs was removed ...";
 

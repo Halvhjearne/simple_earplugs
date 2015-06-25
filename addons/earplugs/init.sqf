@@ -71,12 +71,12 @@ _action = player addAction [format["<img size='1.5'image='%1'/> <t color='#0096f
 	if(HALV_AUTOEARPLUGS)then{
 		HALV_AUTOEARPLUGS = false;
 		player setUserActionText [_this select 2,"<img size='1.5'image='\a3\Ui_f\data\gui\Rsc\RscDisplayArcadeMap\section_outrowin_ca.paa'/> <t color='#0096ff'>Auto Earplugs On</t>"];
-		titleText ["Auto earplugs off","PLAIN DOWN"];
+		cutText ["Auto earplugs off","PLAIN DOWN"];
 		
 	}else{
 		HALV_AUTOEARPLUGS = true;
 		player setUserActionText [_this select 2,"<img size='1.5'image='\a3\Ui_f\data\gui\Rsc\RscDisplayArcadeMap\section_outroloose_ca.paa'/> <t color='#0096ff'>Auto Earplugs Off</t>"];
-		titleText ["Auto earplugs on","PLAIN DOWN"];
+		cutText ["Auto earplugs on","PLAIN DOWN"];
 	};
 },[], -20, false, true, _autohotkey, ""];
 
@@ -91,7 +91,7 @@ while{alive player}do{
 			if !(_set)then{
 				HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 1;
 				3 fadeSound HALV_currentsoundlvl;
-				titleText [format["Earplugs removed ... Volume Increased (100%1)","%"],"PLAIN DOWN"];
+				cutText [format["Earplugs removed ... Volume Increased (100%1)","%"],"PLAIN DOWN"];
 				_set = true;
 			};
 		};
@@ -100,7 +100,7 @@ while{alive player}do{
 			if (_set && !_isPara)then{
 				HALV_currentsoundlvl = _HALV_autoUPDOWNVAL select 0;
 				3 fadeSound HALV_currentsoundlvl;
-				titleText [format["Earplugs inserted ... Volume Decreased (%1%2)",round(HALV_currentsoundlvl*100),"%"],"PLAIN DOWN"];
+				cutText [format["Earplugs inserted ... Volume Decreased (%1%2)",round(HALV_currentsoundlvl*100),"%"],"PLAIN DOWN"];
 				_set = false;
 			};
 		};

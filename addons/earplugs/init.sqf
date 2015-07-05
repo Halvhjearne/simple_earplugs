@@ -69,11 +69,11 @@ _action = player addAction [format["<img size='1.5'image='%1'/> <t color='#0096f
 	if(HALV_AUTOEARPLUGS)then{
 		HALV_AUTOEARPLUGS = false;
 		player setUserActionText [_this select 2,"<img size='1.5'image='\a3\Ui_f\data\gui\Rsc\RscDisplayArcadeMap\section_outrowin_ca.paa'/> <t color='#0096ff'>Auto Earplugs On</t>"];
-		cutText ["Auto earplugs off","PLAIN DOWN"];
+		cutText ["Auto Earplugs Off","PLAIN DOWN"];
 	}else{
 		HALV_AUTOEARPLUGS = true;
 		player setUserActionText [_this select 2,"<img size='1.5'image='\a3\Ui_f\data\gui\Rsc\RscDisplayArcadeMap\section_outroloose_ca.paa'/> <t color='#0096ff'>Auto Earplugs Off</t>"];
-		cutText ["Auto earplugs on","PLAIN DOWN"];
+		cutText ["Auto Earplugs On","PLAIN DOWN"];
 	};
 },[], -20, false, true, _autohotkey, ""];
 

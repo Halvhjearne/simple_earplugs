@@ -31,33 +31,6 @@ if !(_txt isEqualTo "")then{
 	hint _txt;
 };
 
-HALV_earplugtoggle = {
-	_msg = "";
-	_key = _this select 1;
-	if(_key in (HALV_EarplugKeys select 0) || {_key in actionKeys _x}count(HALV_EarplugKeys select 1) > 0)then{
-		_currentsoundlvl = soundVolume - 0.1;
-		if(_currentsoundlvl < 0)then{
-			_currentsoundlvl = 0;
-		};
-		1 fadeSound _currentsoundlvl;
-		_msg = format["Volume Decreased (%1%2) ...",round(_currentsoundlvl*100),"%"];
-		if(_currentsoundlvl isEqualTo 0)then{_msg = format["Muted (0%1) ...","%"];};
-		hint _msg;
-		systemChat _msg;
-	};
-	if(_key in (HALV_EarplugKeys select 2) || {_key in actionKeys _x}count(HALV_EarplugKeys select 3) > 0)then{
-		_currentsoundlvl = soundVolume + 0.1;
-		if(_currentsoundlvl > 1)then{
-			_currentsoundlvl = 1;
-		};
-		_msg = format["Volume Increased (%1%2)...",round(_currentsoundlvl*100),"%"];
-		1 fadeSound _currentsoundlvl;
-		if(_currentsoundlvl isEqualTo 1)then{_msg = format["Full Volume (100%1)","%"];};
-		hint _msg;
-		systemChat _msg;
-	};
-};
-
 _pic = "\a3\Ui_f\data\gui\Rsc\RscDisplayArcadeMap\section_outrowin_ca.paa";
 _txt = "Auto Earplugs On";
 if(HALV_AUTOEARPLUGS)then{
@@ -77,8 +50,6 @@ _action = player addAction [format["<img size='1.5'image='%1'/> <t color='#0096f
 	};
 },[], -20, false, true, _autohotkey, ""];
 
-HALV_earplugsKeyDown = (findDisplay 46) displayAddEventHandler ["KeyDown",{_this call HALV_earplugtoggle}];
-
 waitUntil{sleep 1;!(player isEqualTo (vehicle player))};
 
 while{alive player}do{
@@ -87,14 +58,18 @@ while{alive player}do{
 		if(_isWalking)then{
 			if(soundVolume < _HALV_autoUPDOWNVAL select 1)then{
 				3 fadeSound (_HALV_autoUPDOWNVAL select 1);
-				cutText [format["Earplugs removed ... Volume Increased (%1%2)",round((_HALV_autoUPDOWNVAL select 1)*100),"%"],"PLAIN DOWN"];
+				EPOCH_soundLevel = (_HALV_autoUPDOWNVAL select 1);
+				[format["<t size='0.8'shadow='1'color='#99ffffff'>Internal sound level: %1%2 </t>",round(EPOCH_soundLevel*100),"%"],0,1,5,2,0,1] spawn bis_fnc_dynamictext;
+				//cutText [format["Earplugs removed ... Volume Increased (%1%2)",round(EPOCH_soundLevel*100),"%"],"PLAIN DOWN"];
 			};
 		}else{
 			if (soundVolume > _HALV_autoUPDOWNVAL select 0)then{
 			_isPara = (vehicle player) isKindOf "ParachuteBase";
 				if !(_isPara)then{
 					3 fadeSound (_HALV_autoUPDOWNVAL select 0);
-					cutText [format["Earplugs inserted ... Volume Decreased (%1%2)",round((_HALV_autoUPDOWNVAL select 0)*100),"%"],"PLAIN DOWN"];
+					EPOCH_soundLevel = (_HALV_autoUPDOWNVAL select 0);
+					[format["<t size='0.8'shadow='1'color='#99ffffff'>Internal sound level: %1%2 </t>",round(EPOCH_soundLevel*100),"%"],0,1,5,2,0,1] spawn bis_fnc_dynamictext;
+					//cutText [format["Earplugs inserted ... Volume Decreased (%1%2)",round(EPOCH_soundLevel*100),"%"],"PLAIN DOWN"];
 				};
 			};
 		};
@@ -104,8 +79,6 @@ while{alive player}do{
 
 waitUntil{sleep 1;!(alive player)};
 player removeAction _action;
-
-(findDisplay 46) displayRemoveEventHandler ["KeyDown", HALV_earplugsKeyDown];
 
 3 fadeSound 1;
 

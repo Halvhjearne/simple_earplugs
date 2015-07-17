@@ -21,13 +21,6 @@ if(isServer)exitWith{};
 */
 
 //================================ Settings ================================\\
-//https://community.bistudio.com/wiki/ListOfKeyCodes
-HALV_EarplugKeys = [
-//keys to decrease sounds, default [0x0C],["User1"], wich is - on uk/us keyboard and + on northern eu keyboards + customkey "User1"
-[0x0C],["User1"],
-//keys to increase sounds, default [0x0D],["User2"] wich is + on uk/us and ´ on northern eu keyboards + customkey "User2"
-[0x0D],["User2"]
-];
 
 //autoearplugs true = on when loading in, false = off when loading in
 HALV_AUTOEARPLUGS = true;
@@ -43,5 +36,5 @@ _HALV_autoUPDOWNVAL = [
 ];
 
 //info text show on login, "" to disable
-_txt = "Earplugs Enabled, press + to increase or - reduce sounds (uk/us keyboard)...";
+_txt = "Earplugs Enabled, press Ctrl & + to increase or - reduce sounds (uk/us keyboard)...";
 //============================== End Settings ==============================\\
